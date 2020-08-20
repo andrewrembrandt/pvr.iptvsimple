@@ -110,6 +110,8 @@ void PVRIptvData::Process()
   unsigned int refreshTimer = 0;
   time_t lastRefreshTimeSeconds = std::time(nullptr);
   int lastRefreshHour = Settings::GetInstance().GetM3URefreshHour(); //ignore if we start during same hour
+  unsigned int emptyRefreshDelaySeconds = 5;
+  const unsigned int maxEmptyRefreshDelaySeconds = 5 * 60;
 
   while (m_running)
   {
@@ -119,6 +121,15 @@ void PVRIptvData::Process()
     std::tm timeInfo = *std::localtime(&currentRefreshTimeSeconds);
     refreshTimer += static_cast<unsigned int>(currentRefreshTimeSeconds - lastRefreshTimeSeconds);
     lastRefreshTimeSeconds = currentRefreshTimeSeconds;
+
+    if (m_playlistLoader.IsEmpty()) {
+      if (refreshTimer >= emptyRefreshDelaySeconds) {
+        emptyRefreshDelaySeconds = (double)emptyRefreshDelaySeconds * 1.5d;
+        emptyRefreshDelaySeconds = std::max(emptyRefreshDelaySeconds, maxEmptyRefreshDelaySeconds);
+
+        m_reloadChannelsGroupsAndEPG = true;
+      }
+    }
 
     if (Settings::GetInstance().GetM3URefreshMode() == RefreshMode::REPEATED_REFRESH &&
         refreshTimer >= (Settings::GetInstance().GetM3URefreshIntervalMins() * 60))

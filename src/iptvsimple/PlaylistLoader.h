@@ -50,6 +50,7 @@ namespace iptvsimple
     bool LoadPlayList();
     void ReloadPlayList();
 
+    bool IsEmpty() { return m_channels.GetChannelsList().empty(); }
   private:
     static std::string ReadMarkerValue(const std::string& line, const std::string& markerName);
     static void ParseSinglePropertyIntoChannel(const std::string& line, iptvsimple::data::Channel& channel, const std::string& markerName);

@@ -73,7 +73,7 @@ void Settings::ReadFromAddon(const std::string& userPath, const std::string& cli
   m_udpxyPort = kodi::GetSettingInt("udpxyPort", DEFAULT_UDPXY_MULTICAST_RELAY_PORT);
   m_useFFmpegReconnect = kodi::GetSettingBoolean("useFFmpegReconnect");
   m_useInputstreamAdaptiveforHls = kodi::GetSettingBoolean("useInputstreamAdaptiveforHls", false);
-  m_defaultUserAgent = kodi::GetSettingString("defaultUserAgent");
+  m_defaultUserAgent = kodi::GetSettingString("defaultUserAgent", "Kodi");
   m_defaultInputstream = kodi::GetSettingString("defaultInputstream");
   m_defaultMimeType = kodi::GetSettingString("defaultMimeType");
 }
